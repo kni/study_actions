@@ -1,4 +1,5 @@
-# study_actions
+# Study Actions
+
 It is test for study actions
 
 [![CI C](https://github.com/kni/study_actions/actions/workflows/c.yml/badge.svg)](https://github.com/kni/study_actions/actions/workflows/c.yml)
