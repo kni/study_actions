@@ -1,0 +1,72 @@
+# Actions for C
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    strategy:
+      fail-fast: false
+      matrix: 
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        cc: ["gcc", "clang"]
+
+    # The type of runner that the job will run on
+    runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        shell: ${{ (startsWith(matrix.os, 'windows') && 'msys2 {0}') || 'bash' }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies (ubuntu)
+        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install libgmp-dev
+          if [[ "${{ matrix.codegen }}" == "llvm" ]]; then sudo apt-get install llvm; fi
+          echo Hello, world!
+          
+      - name: Install dependencies (macos)
+        if: ${{ startsWith(matrix.os, 'macos') }}
+        run: |
+          brew update
+          brew install gmp
+          echo "WITH_GMP_DIR=/usr/local" >> $GITHUB_ENV
+          if [[ "${{ matrix.codegen }}" == "llvm" ]]; then brew install llvm; echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH; fi
+      
+      - name: Install msys2 (windows)
+        if: ${{ startsWith(matrix.os, 'windows') }}
+        uses: msys2/setup-msys2@v2
+        with:
+          update: false
+          install: >-
+            base-devel
+            git
+            pactoys
+      - name: Install dependencies (windows)
+        if: ${{ startsWith(matrix.os, 'windows') }}
+        run: |
+          pacboy --noconfirm -S --needed gcc:p clang:p gmp-devel:
+
+      - name: Build
+        run: |
+          uname -a
+          ${{ matrix.cc }} -o main main.c
+          ./main
