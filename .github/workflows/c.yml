@@ -1,6 +1,4 @@
-# Actions for C
-
-name: CI
+name: CI C
 
 # Controls when the workflow will run
 on:
