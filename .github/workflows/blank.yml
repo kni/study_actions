@@ -35,12 +35,37 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Install dependencies (ubuntu)
+        if: ${{ startsWith(matrix.os, 'ubuntu') }}
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          sudo apt-get update
+          sudo apt-get install libgmp-dev
+          if [[ "${{ matrix.codegen }}" == "llvm" ]]; then sudo apt-get install llvm; fi
+          echo Hello, world!
+          
+      - name: Install dependencies (macos)
+        if: ${{ startsWith(matrix.os, 'macos') }}
+        run: |
+          brew update
+          brew install gmp
+          echo "WITH_GMP_DIR=/usr/local" >> $GITHUB_ENV
+          if [[ "${{ matrix.codegen }}" == "llvm" ]]; then brew install llvm; echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH; fi
+      
+      - name: Install msys2 (windows)
+        if: ${{ startsWith(matrix.os, 'windows') }}
+        uses: msys2/setup-msys2@v2
+        with:
+          update: false
+          install: >-
+            base-devel
+            git
+            pactoys
+      - name: Install dependencies (windows)
+        if: ${{ startsWith(matrix.os, 'windows') }}
+        run: |
+          pacboy --noconfirm -S --needed gcc:p gmp-devel:
+
+      - name: Build
+        run: |
+          ${{ matrix.cc }} -o main main.c
+          ./main
