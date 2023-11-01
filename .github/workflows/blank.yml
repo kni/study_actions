@@ -63,9 +63,10 @@ jobs:
       - name: Install dependencies (windows)
         if: ${{ startsWith(matrix.os, 'windows') }}
         run: |
-          pacboy --noconfirm -S --needed gcc:p gmp-devel:
+          pacboy --noconfirm -S --needed gcc:p clang:c gmp-devel:
 
       - name: Build
         run: |
+          uname -a
           ${{ matrix.cc }} -o main main.c
           ./main
