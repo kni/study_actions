@@ -43,7 +43,7 @@ jobs:
           curl -O -L https://github.com/MLton/mlton/releases/download/on-20210117-release/mlton-20210117-1.amd64-linux-glibc2.31.tgz
           tar xzf mlton-20210117-1.amd64-linux-glibc2.31.tgz --exclude='*/share'
           mv mlton-20210117-1.amd64-linux-glibc2.31/* .
-          rmdir mlton-20210117-1.amd64-linux-glibc2.3
+          rmdir mlton-20210117-1.amd64-linux-glibc2.31
           
       - name: Install dependencies (macos)
         if: ${{ startsWith(matrix.os, 'macos') }}
@@ -56,7 +56,7 @@ jobs:
           curl -O -L https://github.com/MLton/mlton/releases/download/on-20210117-release/mlton-20210117-1.amd64-darwin-19.6.gmp-homebrew.tgz
           tar xzf mlton-20210117-1.amd64-darwin-19.6.gmp-homebrew.tgz --exclude='*/share'
           mv mlton-20210117-1.amd64-darwin-19.6.gmp-homebrew/* .
-          rmdir mlton-20210117-1.amd64-darwin-19.6.gmp-homebre
+          rmdir mlton-20210117-1.amd64-darwin-19.6.gmp-homebrew
       
       - name: Install msys2 (windows)
         if: ${{ startsWith(matrix.os, 'windows') }}
@@ -93,5 +93,5 @@ jobs:
       - name: Build
         run: |
           PATH=$(pwd)/boot/bin:$PATH
-          mlton main.c
+          mlton main.sml
           ./main
