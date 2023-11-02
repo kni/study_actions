@@ -65,6 +65,7 @@ jobs:
             base-devel
             git
             pactoys
+            
       - name: Install dependencies (windows)
         if: ${{ startsWith(matrix.os, 'windows') }}
         run: |
@@ -84,8 +85,7 @@ jobs:
           make -version
           echo
           ${{ matrix.cc }} --version
-          echo
-
+          
       - name: Build
         run: |
           PATH=$(pwd)/boot/bin:$PATH
