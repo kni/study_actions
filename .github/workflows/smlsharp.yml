@@ -41,8 +41,8 @@ jobs:
           tar xzf mlton-20210117-1.amd64-linux-glibc2.31.tgz --exclude='*/share'
           mv mlton-20210117-1.amd64-linux-glibc2.31/* .
           rmdir mlton-20210117-1.amd64-linux-glibc2.31
-          wget -P /usr/share/keyrings https://github.com/smlsharp/repos/raw/main/debian/dists/sid/smlsharp-archive-keyring.gpg
-          wget -P /etc/apt/sources.list.d https://github.com/smlsharp/repos/raw/main/debian/dists/sid/smlsharp.list
+          sudo wget -P /usr/share/keyrings https://github.com/smlsharp/repos/raw/main/debian/dists/sid/smlsharp-archive-keyring.gpg
+          sudo wget -P /etc/apt/sources.list.d https://github.com/smlsharp/repos/raw/main/debian/dists/sid/smlsharp.list
           sudo apt update
           sudo apt install smlsharp
           
