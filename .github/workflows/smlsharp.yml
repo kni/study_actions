@@ -58,7 +58,10 @@ jobs:
           ${{ matrix.cc }} --version
           echo
           if [[ "${{ matrix.codegen }}" == "llvm" ]]; then llvm-as -version; opt -version; llc -version; fi
+          sudo ln -s /usr/lib/x86_64-linux-gnu/libmyth.so.0.0.0 libmyth.so
+          echo
           smlsharp --help
+          echo
           ls -l /usr/lib/x86_64-linux-gnu/libmyth.so
 
     
