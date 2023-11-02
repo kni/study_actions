@@ -43,10 +43,8 @@ jobs:
           sudo wget -P /usr/share/keyrings https://github.com/smlsharp/repos/raw/main/debian/dists/sid/smlsharp-archive-keyring.gpg
           sudo wget -P /etc/apt/sources.list.d https://github.com/smlsharp/repos/raw/main/debian/dists/sid/smlsharp.list
           sudo apt-get update
-          sudo apt-get install massivethreads-dev smlsharp
-          echo
-          dpkg -L massivethreads-dev
-                    
+          sudo apt-get install smlsharp
+                     
       - name: Check versions
         run: |
           PATH=$(pwd)/boot/bin:$PATH mlton
