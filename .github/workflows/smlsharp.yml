@@ -64,7 +64,7 @@ jobs:
       - name: Build
         run: |
           PATH=$(pwd)/boot/bin:$PATH
-          smlsharp main.sml
+          smlsharp -o main main.sml
           ./main
           tar czf sml-${{ matrix.os }}-${{ matrix.cc }}.tgz main
 
