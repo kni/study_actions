@@ -1,4 +1,4 @@
-name: CI Standard ML
+name: CI SML#
 
 # Controls when the workflow will run
 on:
