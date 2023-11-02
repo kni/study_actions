@@ -45,7 +45,7 @@ jobs:
           sudo wget -P /etc/apt/sources.list.d https://github.com/smlsharp/repos/raw/main/debian/dists/sid/smlsharp.list
           sudo apt update
           sudo apt install smlsharp
-          sudo ln -s  /usr/lib/x86_64-linux-gnu/libmyth.so.0.0.0 libmyth.so
+          sudo ln -s /usr/lib/x86_64-linux-gnu/libmyth.so.0.0.0 libmyth.so
           
       - name: Check versions
         run: |
@@ -59,6 +59,7 @@ jobs:
           echo
           if [[ "${{ matrix.codegen }}" == "llvm" ]]; then llvm-as -version; opt -version; llc -version; fi
           smlsharp --help
+          ls -l /usr/lib/x86_64-linux-gnu/libmyth.so
 
     
       - name: Build
