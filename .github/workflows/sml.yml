@@ -95,3 +95,10 @@ jobs:
           PATH=$(pwd)/boot/bin:$PATH
           mlton main.sml
           ./main
+          tar czf sml-${{ matrix.os }}-${{ matrix.cc }}.tgz main
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sml-${{ matrix.os }}-${{ matrix.cc }}
+          path: ./*.tgz
