@@ -93,7 +93,7 @@ jobs:
       - name: Build
         run: |
           PATH=$(pwd)/boot/bin:$PATH
-          mlton main.sml
+          mlton -link-opt -static main.sml
           ./main
           tar czf sml-${{ matrix.os }}-${{ matrix.cc }}.tgz main
 
