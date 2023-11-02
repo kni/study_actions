@@ -1,0 +1,75 @@
+name: CI Standard ML
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # push:
+  #  branches: [ "main" ]
+  # pull_request:
+  #  branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    strategy:
+      fail-fast: false
+      matrix: 
+        os: [ubuntu-latest]
+        cc: ["gcc", "clang"]
+
+    # The type of runner that the job will run on
+    runs-on: ${{ matrix.os }}
+
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies (ubuntu)
+        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install libgmp-dev
+          if [[ "${{ matrix.codegen }}" == "llvm" ]]; then sudo apt-get install llvm; fi
+          mkdir boot && cd boot
+          curl -O -L https://github.com/MLton/mlton/releases/download/on-20210117-release/mlton-20210117-1.amd64-linux-glibc2.31.tgz
+          tar xzf mlton-20210117-1.amd64-linux-glibc2.31.tgz --exclude='*/share'
+          mv mlton-20210117-1.amd64-linux-glibc2.31/* .
+          rmdir mlton-20210117-1.amd64-linux-glibc2.31
+          wget -P /usr/share/keyrings https://github.com/smlsharp/repos/raw/main/debian/dists/sid/smlsharp-archive-keyring.gpg
+          wget -P /etc/apt/sources.list.d https://github.com/smlsharp/repos/raw/main/debian/dists/sid/smlsharp.list
+          sudo apt update
+          sudo apt install smlsharp
+          
+    
+      - name: Check versions
+        run: |
+          PATH=$(pwd)/boot/bin:$PATH mlton
+          echo
+          uname -a
+          echo
+          make -version
+          echo
+          ${{ matrix.cc }} --version
+          echo
+          if [[ "${{ matrix.codegen }}" == "llvm" ]]; then llvm-as -version; opt -version; llc -version; fi
+          smlsharp -help
+
+    
+      - name: Build
+        run: |
+          PATH=$(pwd)/boot/bin:$PATH
+          smlsharp main.sml
+          ./main
+          tar czf sml-${{ matrix.os }}-${{ matrix.cc }}.tgz main
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sml-${{ matrix.os }}-${{ matrix.cc }}
+          path: ./*.tgz
