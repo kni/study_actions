@@ -38,7 +38,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install libgmp-dev
-          if [[ "${{ matrix.codegen }}" == "llvm" ]]; then sudo apt-get install llvm; fi
           mkdir boot && cd boot
           curl -O -L https://github.com/MLton/mlton/releases/download/on-20210117-release/mlton-20210117-1.amd64-linux-glibc2.31.tgz
           tar xzf mlton-20210117-1.amd64-linux-glibc2.31.tgz --exclude='*/share'
@@ -51,7 +50,6 @@ jobs:
           brew update
           brew install gmp
           echo "WITH_GMP_DIR=/usr/local" >> $GITHUB_ENV
-          if [[ "${{ matrix.codegen }}" == "llvm" ]]; then brew install llvm; echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH; fi
           mkdir boot && cd boot
           curl -O -L https://github.com/MLton/mlton/releases/download/on-20210117-release/mlton-20210117-1.amd64-darwin-19.6.gmp-homebrew.tgz
           tar xzf mlton-20210117-1.amd64-darwin-19.6.gmp-homebrew.tgz --exclude='*/share'
@@ -87,9 +85,7 @@ jobs:
           echo
           ${{ matrix.cc }} --version
           echo
-          if [[ "${{ matrix.codegen }}" == "llvm" ]]; then llvm-as -version; opt -version; llc -version; fi
 
-    
       - name: Build
         run: |
           PATH=$(pwd)/boot/bin:$PATH
