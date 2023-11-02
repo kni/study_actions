@@ -77,10 +77,10 @@ jobs:
         run: |
           ${{ matrix.cc }} -o main main.c
           ./main
-          tar czf c-${{ matrix.os }}_${{ matrix.cc }}.tgz main
+          tar czf c-${{ matrix.os }}-${{ matrix.cc }}.tgz main
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: c-${{ matrix.os }}_${{ matrix.cc }}
+          name: c-${{ matrix.os }}-${{ matrix.cc }}
           path: ./*.tgz
