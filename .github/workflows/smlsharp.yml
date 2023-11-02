@@ -43,12 +43,10 @@ jobs:
           sudo wget -P /usr/share/keyrings https://github.com/smlsharp/repos/raw/main/debian/dists/sid/smlsharp-archive-keyring.gpg
           sudo wget -P /etc/apt/sources.list.d https://github.com/smlsharp/repos/raw/main/debian/dists/sid/smlsharp.list
           sudo apt-get update
-          sudo apt-get install smlsharp
+          sudo apt-get install massivethreads-dev smlsharp
           echo
-          dpkg -L massivethreads
-          sudo ln -s /usr/lib/x86_64-linux-gnu/libmyth.so.0.0.0 libmyth.so
-          echo Foo
-          
+          dpkg -L massivethreads-dev
+                    
       - name: Check versions
         run: |
           PATH=$(pwd)/boot/bin:$PATH mlton
@@ -59,15 +57,8 @@ jobs:
           echo
           ${{ matrix.cc }} --version
           echo
-          dpkg -L massivethreads
-          echo
-          sudo ln -s /usr/lib/x86_64-linux-gnu/libmyth.so.0.0.0 libmyth.so
-          echo Hi
           smlsharp --help
-          echo
-          ls -l /usr/lib/x86_64-linux-gnu/libmyth.so
-
-    
+              
       - name: Build
         run: |
           PATH=$(pwd)/boot/bin:$PATH
