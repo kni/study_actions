@@ -58,7 +58,7 @@ jobs:
           ${{ matrix.cc }} --version
           echo
           if [[ "${{ matrix.codegen }}" == "llvm" ]]; then llvm-as -version; opt -version; llc -version; fi
-          smlsharp -help
+          smlsharp --help
 
     
       - name: Build
