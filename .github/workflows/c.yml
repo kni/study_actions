@@ -38,8 +38,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install libgmp-dev
-          if [[ "${{ matrix.codegen }}" == "llvm" ]]; then sudo apt-get install llvm; fi
-          echo Hello, world!
           
       - name: Install dependencies (macos)
         if: ${{ startsWith(matrix.os, 'macos') }}
@@ -47,8 +45,7 @@ jobs:
           brew update
           brew install gmp
           echo "WITH_GMP_DIR=/usr/local" >> $GITHUB_ENV
-          if [[ "${{ matrix.codegen }}" == "llvm" ]]; then brew install llvm; echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH; fi
-      
+                
       - name: Install msys2 (windows)
         if: ${{ startsWith(matrix.os, 'windows') }}
         uses: msys2/setup-msys2@v2
@@ -70,9 +67,7 @@ jobs:
           make -version
           echo
           ${{ matrix.cc }} --version
-          echo
-          if [[ "${{ matrix.codegen }}" == "llvm" ]]; then llvm-as -version; opt -version; llc -version; fi
-
+          
       - name: Build
         run: |
           ${{ matrix.cc }} -o main main.c
