@@ -75,7 +75,7 @@ jobs:
 
       - name: Build
         run: |
-          ${{ matrix.cc }} -Bstatic -o main main.c
+          ${{ matrix.cc }} -o main main.c
           ./main
           tar czf c-${{ matrix.os }}-${{ matrix.cc }}.tgz main
 
